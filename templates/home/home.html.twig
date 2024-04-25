@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1 class="text-3xl font-bold underline mb-4">Liste des produits</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Utilisateur/Documents/Projets_brief/shopfinity/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/Users/Utilisateur/Documents/Projets_brief/shopfinity/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="grid grid-cols-3 gap-4">
+        {% for product in products %}
+            <div class="border rounded overflow-hidden shadow-lg">
+                <img class="w-full" src="/images/{{ product.imageName }}" alt="Image de {{ product.title }}">
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{ product.title }}</div>
+                    <p class="text-gray-700 text-base">
+                        {{ product.description }}
+                    </p>
+                </div>
+                <div class="px-6 pt-4 pb-2">
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
+                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ product.available ? 'Disponible' : 'Non disponible' }}</span>
+                </div>
+                <div class="px-6 pt-4 pb-2">
+                    <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ path('app_products_show', {'id': product.id}) }}">Voir</a>
+                    <a class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2" href="{{ path('app_order', {'id': product.id}) }}">Acheter</a>
+                    {# <a class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2" href="{{ path('app_products_edit', {'id': product.id}) }}">Modifier</a> #}
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-3 text-center py-2">
+                Aucun enregistrement trouvé
+            </div>
+        {% endfor %}
+    </div>
+
+    {# <a class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ path('app_products_new') }}">Créer nouveau</a> #}
+
 {% endblock %}

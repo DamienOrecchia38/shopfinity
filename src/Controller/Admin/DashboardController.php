@@ -37,8 +37,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-user', Users::class);
         yield MenuItem::section('Commandes');
         yield MenuItem::linkToCrud('Commandes', 'fa fa-file text', Orders::class);
-        yield MenuItem::section('Articles');
-        yield MenuItem::linkToCrud('Articles', 'fas fa-tags', Products::class);
+        yield MenuItem::section('Produits');
+        yield MenuItem::linkToCrud('Produits', 'fas fa-tags', Products::class);
         yield MenuItem::linkToCrud('Catégories', 'fa fa-file text', Categories::class);
     }
 }

@@ -5,12 +5,73 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
+    <div class="bg-gray-100">
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex justify-between">
+                    <div class="flex space-x-7">
+                        <div class="flex-1">
+                            <a href="{{ path('app_home') }}" class="flex items-center py-4 px-2">
+                                <span class="font-semibold text-gray-500 text-lg">Shopfinity</span>
+                            </a>
+                        </div>
+                        <div class="hidden md:flex items-center space-x-1 justify-center flex-grow">
+                            <a href="{{ path('app_home') }}" class="py-4 px-2 text-green-500 {{ app.request.attributes.get('_route') == 'app_home' ? 'border-b-4 border-green-500' : '' }} font-semibold">Accueil</a>
+                            {% if app.user %}
+                                <a href="{{ path('app_account') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_account' ? 'border-b-4 border-green-500' : '' }} font-semibold hover:text-green-500 transition duration-300">Mon compte</a>
+                                <a href="{{ path('app_order') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_order' ? 'border-b-4 border-green-500' : '' }} font-semibold hover:text-green-500 transition duration-300">Panier</a>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_login' ? 'border-b-4 border-green-500' : '' }} font-semibold hover:text-green-500 transition duration-300">Se connecter</a>
+                                <a href="{{ path('app_register') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_register' ? 'border-b-4 border-green-500' : '' }} font-semibold hover:text-green-500 transition duration-300">S'inscrire</a>
+                            {% endif %}
+                            <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Contact</a>
+                            {% if app.user %}
+                                <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mb-4">Bonjour {{ app.user.name }} ! <a href="{{ path('app_logout') }}" class="underline">Déconnexion</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- mobile menu -->
+                    <div class="md:hidden flex items-center">
+                        <button class="outline-none mobile-menu-button">
+                        <svg class=" w-6 h-6 text-gray-500 hover:text-green-500 "
+                            x-show="!showMenu"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- mobile menu -->
+        <div class="hidden mobile-menu">
+            <ul class="">
+                <li class="active"><a href="{{ path('app_home') }}" class="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">Accueil</a></li>
+                {% if app.user %}
+                    <a href="{{ path('app_account') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Mon compte</a>
+                    <a href="{{ path('app_order') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Panier</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Se connecter</a>
+                    <a href="{{ path('app_register') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">S'inscrire</a>
+                {% endif %}
+                <li><a href="#about" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">À propos</a></li>
+                <li><a href="#contact" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
     <body>
         {% block body %}{% endblock %}
     </body>
