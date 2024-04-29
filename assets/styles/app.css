@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 body {
-    /* background: #FFEFBA; 
-    background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA); 
-    background: linear-gradient(to right, #FFFFFF, #FFEFBA);  */
     background: #FDC830; 
     background: -webkit-linear-gradient(to right, #F37335, #FDC830);
     background: linear-gradient(to right, #F37335, #FDC830);

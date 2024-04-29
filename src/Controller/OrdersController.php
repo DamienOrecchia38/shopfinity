@@ -6,14 +6,17 @@ use App\Entity\Orders;
 use App\Entity\Products;
 use App\Form\OrdersType;
 use App\Repository\OrdersRepository;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/orders')]
-class OrdersController extends AbstractController
+class OrdersController extends AbstractController implements EventSubscriberInterface 
 {
     
     #[Route('/cart', name: 'app_cart_show', methods: ['GET'])]
@@ -85,4 +88,20 @@ class OrdersController extends AbstractController
     //         'form' => $form,
     //     ]);
     // }
+
+    public static function getSubscribedEvents()
+    {
+        return [
+            BeforeEntityPersistedEvent::class => ['onOrderCreated'],
+        ];
+    }
+
+    public function onOrderCreated(BeforeEntityPersistedEvent $event)
+    {
+        $entity = $event->getEntityInstance();
+        
+        if ($entity instanceof Orders) {
+            $entity->setCreatedAt(new \DateTime());
+        }
+    }
 }

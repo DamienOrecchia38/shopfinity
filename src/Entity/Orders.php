@@ -25,8 +25,11 @@ class Orders
     /**
      * @var Collection<int, products>
      */
-    #[ORM\ManyToMany(targetEntity: products::class, inversedBy: 'orders')]
+    #[ORM\ManyToMany(targetEntity: Products::class, inversedBy: 'orders')]
     private Collection $relation_orders_products;
+
+    #[ORM\Column(length: 255)]
+    private ?string $order_number = null;
 
     public function __construct()
     {
@@ -63,14 +66,14 @@ class Orders
     }
 
     /**
-     * @return Collection<int, products>
+     * @return Collection<int, Products>
      */
     public function getRelationOrdersProducts(): Collection
     {
         return $this->relation_orders_products;
     }
 
-    public function addRelationOrdersProduct(products $relationOrdersProduct): static
+    public function addRelationOrdersProduct(Products $relationOrdersProduct): static
     {
         if (!$this->relation_orders_products->contains($relationOrdersProduct)) {
             $this->relation_orders_products->add($relationOrdersProduct);
@@ -79,9 +82,21 @@ class Orders
         return $this;
     }
 
-    public function removeRelationOrdersProduct(products $relationOrdersProduct): static
+    public function removeRelationOrdersProduct(Products $relationOrdersProduct): static
     {
         $this->relation_orders_products->removeElement($relationOrdersProduct);
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?string
+    {
+        return $this->order_number;
+    }
+
+    public function setOrderNumber(string $order_number): static
+    {
+        $this->order_number = $order_number;
 
         return $this;
     }

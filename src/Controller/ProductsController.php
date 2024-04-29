@@ -36,10 +36,18 @@ class ProductsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_products_show', methods: ['GET'])]
-    public function show(Products $product): Response
+    public function show(Products $product, Request $request): Response
     {
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
+        $cartQuantity = 0;
+        foreach ($cart as $quantity) {
+            $cartQuantity += $quantity;
+        }
+
         return $this->render('products/show.html.twig', [
             'product' => $product,
+            'cartQuantity' => $cartQuantity,
         ]);
     }
 

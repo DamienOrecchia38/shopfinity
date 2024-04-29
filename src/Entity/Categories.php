@@ -19,9 +19,9 @@ class Categories
     private ?string $title = null;
 
     /**
-     * @var Collection<int, products>
+     * @var Collection<int, Products>
      */
-    #[ORM\OneToMany(targetEntity: products::class, mappedBy: 'categories')]
+    #[ORM\OneToMany(targetEntity: Products::class, mappedBy: 'categories')]
     private Collection $relation_categories_products;
 
     public function __construct()
@@ -47,14 +47,14 @@ class Categories
     }
 
     /**
-     * @return Collection<int, products>
+     * @return Collection<int, Products>
      */
     public function getRelationCategoriesProducts(): Collection
     {
         return $this->relation_categories_products;
     }
 
-    public function addRelationCategoriesProduct(products $relationCategoriesProduct): static
+    public function addRelationCategoriesProduct(Products $relationCategoriesProduct): static
     {
         if (!$this->relation_categories_products->contains($relationCategoriesProduct)) {
             $this->relation_categories_products->add($relationCategoriesProduct);
@@ -64,7 +64,7 @@ class Categories
         return $this;
     }
 
-    public function removeRelationCategoriesProduct(products $relationCategoriesProduct): static
+    public function removeRelationCategoriesProduct(Products $relationCategoriesProduct): static
     {
         if ($this->relation_categories_products->removeElement($relationCategoriesProduct)) {
             // set the owning side to null (unless already changed)

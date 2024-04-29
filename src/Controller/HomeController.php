@@ -6,7 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ProductsRepository;
+use App\Repository\CategoriesRepository;
+use App\Entity\Categories;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
@@ -23,18 +26,28 @@ class HomeController extends AbstractController
     }
 
     #[Route('/home', name: 'app_home')]
-    public function index(ProductsRepository $productsRepository, Request $request): Response
+    public function index(ProductsRepository $productsRepository, CategoriesRepository $categoriesRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $cartQuantity = $this->cartQuantity($request);
+        $data = $productsRepository->findAll();
+
+        $products = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            6
+        );
+
+        $categories = $categoriesRepository->findAll();
 
         return $this->render('home/home.html.twig', [
-            'products' => $productsRepository->findAll(),
+            'products' => $products,
             'cartQuantity' => $cartQuantity,
+            'categories' => $categories,
         ]);
     }
 
     #[Route('/add-to-cart/{id}', name: 'app_add_to_cart', methods: ['POST'])]
-    public function addToCart(int $id, Request $request, ProductsRepository $productsRepository): Response
+    public function addToCart(int $id, Request $request, ProductsRepository $productsRepository, CategoriesRepository $categoriesRepository, PaginatorInterface $paginator): Response
     {
         $cartQuantity = $this->cartQuantity($request);
         $session = $request->getSession();
@@ -46,11 +59,22 @@ class HomeController extends AbstractController
         $cart[$id]++;
     
         $session->set('cart', $cart);
+
+        $data = $productsRepository->findAll();
+
+        $products = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            6
+        );
+
+        $categories = $categoriesRepository->findAll();
     
         return $this->render('home/home.html.twig', [
             'cart' => $cart,
             'cartQuantity' => $cartQuantity,
-            'products' => $productsRepository->findAll(),
+            'products' => $products,
+            'categories' => $categories,
         ]);
     }
 }

@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         customYellow: '#f9dc5c',
+        customStrongYellow: '#ff7b00',
         customBrownYellow: '#c36f09',
       }
     },
