@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Orders;
+use App\Entity\Products;
 use App\Form\OrdersType;
 use App\Repository\OrdersRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,68 +15,74 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/orders')]
 class OrdersController extends AbstractController
 {
-    #[Route('/', name: 'app_orders_index', methods: ['GET'])]
-    public function index(OrdersRepository $ordersRepository): Response
+    
+    #[Route('/cart', name: 'app_cart_show', methods: ['GET'])]
+    public function showCart(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('orders/index.html.twig', [
-            'orders' => $ordersRepository->findAll(),
-        ]);
-    }
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
 
-    #[Route('/new', name: 'app_orders_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $order = new Orders();
-        $form = $this->createForm(OrdersType::class, $order);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($order);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
+        $products = [];
+        $productRepository = $entityManager->getRepository(Products::class);
+        foreach ($cart as $id => $quantity) {
+            $product = $productRepository->find($id);
+            if ($product) {
+                $products[] = ['product' => $product, 'quantity' => $quantity];
+            }
         }
 
-        return $this->render('orders/new.html.twig', [
-            'order' => $order,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/order', name: 'app_order', methods: ['GET'])]
-    public function show(Orders $order): Response
-    {
-        return $this->render('orders/index.html.twig', [
-            'order' => $order,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_orders_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Orders $order, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(OrdersType::class, $order);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
+        $priceTotal = 0;
+        foreach ($products as $item) {
+            $priceTotal += $item['product']->getPrice() * $item['quantity'];
         }
 
-        return $this->render('orders/edit.html.twig', [
-            'order' => $order,
-            'form' => $form,
+        $cartQuantity = 0;
+        foreach ($cart as $quantity) {
+            $cartQuantity += $quantity;
+        }
+
+        return $this->render('orders/cart.html.twig', [
+            'products' => $products,
+            'priceTotal' => $priceTotal,
+            'cartQuantity' => $cartQuantity,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_orders_delete', methods: ['POST'])]
-    public function delete(Request $request, Orders $order, EntityManagerInterface $entityManager): Response
+    #[Route('/cart/remove/{id}', name: 'app_remove_from_cart', methods: ['POST'])]
+    public function removeFromCart(int $id, Request $request): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$order->getId(), $request->getPayload()->get('_token'))) {
-            $entityManager->remove($order);
-            $entityManager->flush();
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
+
+        if (isset($cart[$id])) {
+            if ($cart[$id] > 1) {
+                $cart[$id]--;
+            } else {
+                unset($cart[$id]);
+            }
+            $session->set('cart', $cart);
         }
 
-        return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_cart_show');
     }
+
+    // #[Route('/new', name: 'app_orders_new', methods: ['GET', 'POST'])]
+    // public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // {
+    //     $order = new Orders();
+    //     $form = $this->createForm(OrdersType::class, $order);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->persist($order);
+    //         $entityManager->flush();
+
+    //         return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     return $this->render('orders/new.html.twig', [
+    //         'order' => $order,
+    //         'form' => $form,
+    //     ]);
+    // }
 }

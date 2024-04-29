@@ -3,13 +3,55 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+<div class="carousel relative container mx-auto" style="max-width:1600px;">
+    <div class="carousel-inner relative overflow-hidden w-full">
+        <!--Slide 1-->
+        <input class="carousel-open" type="radio" id="carousel-1" name="carousel" aria-hidden="true" hidden="" checked="checked">
+        <div class="carousel-item absolute opacity-0" style="height:50vh;">
+            <img src="{{ asset('images/products/image_miracle_cream.jpg') }}" alt="Slide 1" class="block h-full w-full object-cover">
+        </div>
+        <label for="carousel-3" class="prev control-1 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 left-0 my-auto">‹</label>
+        <label for="carousel-2" class="next control-1 w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 right-0 my-auto">›</label>
+        
+        <!--Slide 2-->
+        <input class="carousel-open" type="radio" id="carousel-2" name="carousel" aria-hidden="true" hidden="">
+        <div class="carousel-item absolute opacity-0 bg-cover bg-center" style="height:50vh;">
+            <img src="{{ asset('images/products/image_miracle_cream.jpg') }}" alt="Slide 2" class="block h-full w-full object-cover">
+        </div>
+        <label for="carousel-1" class="prev control-2 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 left-0 my-auto">‹</label>
+        <label for="carousel-3" class="next control-2 w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 right-0 my-auto">›</label>
 
-    <h1 class="text-3xl font-bold underline mb-4">Liste des produits</h1>
+        <!--Slide 3-->
+        <input class="carousel-open" type="radio" id="carousel-3" name="carousel" aria-hidden="true" hidden="">
+        <div class="carousel-item absolute opacity-0" style="height:50vh;">
+            <img src="{{ asset('images/products/image_miracle_cream.jpg') }}" alt="Slide 3" class="block h-full w-full object-cover">
+        </div>
+        <label for="carousel-2" class="prev control-3 w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 left-0 my-auto">‹</label>
+        <label for="carousel-1" class="next control-3 w-10 h-10 mr-2 md:mr-10 absolute cursor-pointer hidden text-3xl font-bold text-black hover:text-white rounded-full bg-white hover:bg-black leading-tight text-center z-10 inset-y-0 right-0 my-auto">›</label>
 
-    <div class="grid grid-cols-3 gap-4">
+        <!-- Add additional indicators for each slide-->
+        <ol class="carousel-indicators">
+            <li class="inline-block mr-3">
+                <label for="carousel-1" class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-blue-700">•</label>
+            </li>
+            <li class="inline-block mr-3">
+                <label for="carousel-2" class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-blue-700">•</label>
+            </li>
+            <li class="inline-block mr-3">
+                <label for="carousel-3" class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-blue-700">•</label>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="mx-7">
+    <h1 class="text-3xl font-bold mb-4">Un large choix de produits</h1>
+
+    <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for product in products %}
-            <div class="border rounded overflow-hidden shadow-lg">
-                <img class="w-full" src="/images/{{ product.imageName }}" alt="Image de {{ product.title }}">
+            <div class="border rounded overflow-hidden shadow-lg bg-white">
+                {# <img class="w-full" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}"> #}
+                <img class="w-full" src="{{ asset('images/products/image_miracle_cream.jpg') }}" alt="Image de {{ product.title }}">
                 <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">{{ product.title }}</div>
                     <p class="text-gray-700 text-base">
@@ -20,19 +62,18 @@
                     <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
                     <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ product.available ? 'Disponible' : 'Non disponible' }}</span>
                 </div>
-                <div class="px-6 pt-4 pb-2">
-                    <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ path('app_products_show', {'id': product.id}) }}">Voir</a>
-                    <a class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2" href="{{ path('app_order', {'id': product.id}) }}">Acheter</a>
-                    {# <a class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2" href="{{ path('app_products_edit', {'id': product.id}) }}">Modifier</a> #}
+                <div class="px-6 pt-4 pb-2 flex">
+                    <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2">Voir</a>
+                    <form class="ml-2 buyButton" action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
+                        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Acheter</button>
+                    </form>
                 </div>
             </div>
         {% else %}
-            <div class="col-span-3 text-center py-2">
-                Aucun enregistrement trouvé
+            <div class="col-span-4 text-center py-2">
+                Aucun article n'a été trouvé.
             </div>
         {% endfor %}
     </div>
-
-    {# <a class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ path('app_products_new') }}">Créer nouveau</a> #}
-
+</div>
 {% endblock %}

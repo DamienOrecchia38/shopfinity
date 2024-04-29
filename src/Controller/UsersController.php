@@ -14,11 +14,38 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/users')]
 class UsersController extends AbstractController
 {
-    #[Route('/', name: 'app_users_index', methods: ['GET'])]
-    public function index(UsersRepository $usersRepository): Response
+    #[Route('/account', name: 'app_account', methods: ['GET'])]
+    public function account(Request $request): Response
     {
-        return $this->render('users/index.html.twig', [
-            'users' => $usersRepository->findAll(),
+        $user = $this->getUser();
+        $session = $request->getSession();
+        $cart = $session->get('cart', []);
+        $cartQuantity = 0;
+        foreach ($cart as $quantity) {
+            $cartQuantity += $quantity;
+        }
+
+        return $this->render('users/account.html.twig', [
+            'user' => $user,
+            'cartQuantity' => $cartQuantity,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UsersType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('users/edit.html.twig', [
+            'user' => $user,
+            'form' => $form,
         ]);
     }
 
@@ -37,34 +64,6 @@ class UsersController extends AbstractController
         }
 
         return $this->render('users/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/account', name: 'app_account', methods: ['GET'])]
-    public function account(): Response
-    {
-        $user = $this->getUser();
-        
-        return $this->render('users/account.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(UsersType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('users/edit.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);
