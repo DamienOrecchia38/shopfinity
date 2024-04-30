@@ -10,6 +10,7 @@ module.exports = {
         customYellow: '#f9dc5c',
         customStrongYellow: '#ff7b00',
         customBrownYellow: '#c36f09',
+        customSidebar: '#ff8800',
       }
     },
   },

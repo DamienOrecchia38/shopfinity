@@ -4,15 +4,12 @@
 
 {% block body %}
 
-<div class="flex">
-    <aside class="w-0.5/10 bg-yellow-100 p-4 transition-width duration-300 hover:w-1/4">
-        <h2 class="font-bold text-lg mb-4">Catégories</h2>
-        <ul>
-            {% for category in categories %}
-                <li><a href="{{ path('app_categories_show', {'id': category.id}) }}" class="text-grey-500 hover:text-customBrownYellow">{{ category.title }}</a></li>
-            {% endfor %}
-        </ul>
-    </aside>
+    <div class="carousel">
+        <div>une photo</div>
+        <div>une seconde photo</div>
+        <div>une troisème photo</div>
+    </div>
+
     <div class="flex-1">
         <div class="mx-7">
             <h1 class="text-3xl font-bold mb-4">Un large choix de produits</h1>
@@ -20,17 +17,24 @@
             <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for product in products %}
                     <div class="border rounded overflow-hidden shadow-lg bg-white">
-                        {# <img class="w-full" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}"> #}
-                        <img class="w-full" src="{{ asset('images/products/image_magic_pills.jpg') }}" alt="Image de {{ product.title }}">
+                        <img class="w-full" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
                         <div class="px-6 py-4">
                             <div class="font-bold text-xl mb-2">{{ product.title }}</div>
                             <p class="text-gray-700 text-base">
-                                {{ product.description }}
+                                {{ product.description|striptags }}
                             </p>
                         </div>
                         <div class="px-6 pt-4 pb-2 flex">
                             <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
-                            <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mr-2 mb-2">{{ product.available ? 'En stock' : 'Victime de son succès' }}</span>
+                            <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mr-2 mb-2">
+                                {% if product.available %}
+                                    <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L10 12.586l7.293-7.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                                    En stock
+                                {% else %}
+                                    <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-11.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"></path></svg>
+                                    Victime de son succès
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="px-6 pt-4 pb-2 flex">
                             <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 rounded ml-2">Voir</a>
@@ -48,9 +52,11 @@
                         Aucun article n'a été trouvé.
                     </div>
                 {% endfor %}
+            </div>
+            <div class="mt-4">
                 {{ knp_pagination_render(products) }}
+            </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

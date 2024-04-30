@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrdersRepository::class)]
 class Orders
@@ -20,12 +21,17 @@ class Orders
     private ?\DateTimeInterface $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'relation_users_orders')]
+    #[Assert\NotNull(message: "L'utilisateur associé à la commande ne peut pas être nul.")]
     private ?Users $users = null;
 
     /**
-     * @var Collection<int, products>
+     * @var Collection<int, Products>
      */
     #[ORM\ManyToMany(targetEntity: Products::class, inversedBy: 'orders')]
+    #[Assert\Count(
+        min: 1,
+        minMessage: "La commande doit contenir au moins un produit."
+    )]
     private Collection $relation_orders_products;
 
     #[ORM\Column(length: 255)]

@@ -14,13 +14,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\CategoriesRepository;
 
 #[Route('/orders')]
 class OrdersController extends AbstractController implements EventSubscriberInterface 
 {
     
     #[Route('/cart', name: 'app_cart_show', methods: ['GET'])]
-    public function showCart(Request $request, EntityManagerInterface $entityManager): Response
+    public function showCart(Request $request, EntityManagerInterface $entityManager, CategoriesRepository $categoriesRepository): Response
     {
         $session = $request->getSession();
         $cart = $session->get('cart', []);
@@ -44,10 +45,13 @@ class OrdersController extends AbstractController implements EventSubscriberInte
             $cartQuantity += $quantity;
         }
 
+        $categories = $categoriesRepository->findAll();
+
         return $this->render('orders/cart.html.twig', [
             'products' => $products,
             'priceTotal' => $priceTotal,
             'cartQuantity' => $cartQuantity,
+            'categories' => $categories,
         ]);
     }
 

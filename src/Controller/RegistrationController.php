@@ -12,11 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\CategoriesRepository;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, CategoriesRepository $categoriesRepository): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -37,8 +38,11 @@ class RegistrationController extends AbstractController
             return $security->login($user, AppAuthenticator::class, 'main');
         }
 
+        $categories = $categoriesRepository->findAll();
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+            'categories' => $categories,
         ]);
     }
 }

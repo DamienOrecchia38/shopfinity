@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cet email')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -22,6 +23,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\Email(
+        message: 'L\'adresse email "{{ value }}" n\'est pas une adresse email valide.'
+    )]
+    #[Assert\NotBlank(
+        message: 'L\'adresse email ne peut pas être vide.'
+    )]
     private ?string $email = null;
 
     /**
@@ -34,18 +41,31 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Le mot de passe doit comporter au moins {{ limit }} caractères.'
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
+    #[Assert\NotBlank(
+        message: 'Le nom ne peut pas être vide.'
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 60,
+        minMessage: 'Le nom doit comporter au minimum {{ limit }} caractères.',
+        maxMessage: 'Le nom doit comporter au maximum {{ limit }} caractères.'
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
     /**
-     * @var Collection<int, orders>
+     * @var Collection<int, Orders>
      */
-    #[ORM\OneToMany(targetEntity: orders::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Orders::class, mappedBy: 'users')]
     private Collection $relation_users_orders;
 
     public function __construct()
@@ -89,7 +109,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        // pour garantir que chaque user à au moins le ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -125,7 +145,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
@@ -174,7 +193,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeRelationUsersOrder(orders $relationUsersOrder): static
     {
         if ($this->relation_users_orders->removeElement($relationUsersOrder)) {
-            // set the owning side to null (unless already changed)
             if ($relationUsersOrder->getUsers() === $this) {
                 $relationUsersOrder->setUsers(null);
             }

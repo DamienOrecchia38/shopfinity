@@ -10,12 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\CategoriesRepository;
 
 #[Route('/users')]
 class UsersController extends AbstractController
 {
     #[Route('/account', name: 'app_account', methods: ['GET'])]
-    public function account(Request $request): Response
+    public function account(Request $request, CategoriesRepository $categoriesRepository): Response
     {
         $user = $this->getUser();
         $session = $request->getSession();
@@ -25,9 +26,12 @@ class UsersController extends AbstractController
             $cartQuantity += $quantity;
         }
 
+        $categories = $categoriesRepository->findAll();
+
         return $this->render('users/account.html.twig', [
             'user' => $user,
             'cartQuantity' => $cartQuantity,
+            'categories' => $categories,
         ]);
     }
 

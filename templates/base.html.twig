@@ -6,6 +6,8 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
         {% endblock %}
 
         {% block javascripts %}
@@ -24,7 +26,14 @@
                             </a>
                         </div>
                         <div class="hidden md:flex items-center space-x-1 justify-center flex-grow">
-                            <a href="{{ path('app_home') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_home' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Accueil</a>
+                            <div class="group inline-block">
+                                <a href="{{ path('app_home') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_home' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Accueil</a>
+                                <div class="hidden group-hover:block absolute bg-white shadow-lg">
+                                    {% for category in categories %}
+                                        <a href="{{ path('app_home') }}" class="block py-2 px-4 text-sm text-gray-7000 hover:bg-gray-100">{{ category.title }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             {% if app.user %}
                                 <a href="{{ path('app_account') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_account' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Mon compte</a>
                                 <a href="{{ path('app_cart_show') }}" class="py-4 px-2 text-gray-500 {{ app.request.attributes.get('_route') == 'app_order' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">
@@ -80,5 +89,6 @@
         {# <footer class="bg-gray-200 text-center text-xs p-3 absolute bottom-0 w-full">
             © 2024 Shopfinity. Tous droits réservés.
         </footer> #}
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     </body>
 </html>
