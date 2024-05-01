@@ -13,7 +13,7 @@ trait ProductsListTrait {
         $productsList = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            6
+            8
         );
 
         return $productsList;

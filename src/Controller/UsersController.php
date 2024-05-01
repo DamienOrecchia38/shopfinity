@@ -32,6 +32,18 @@ class UsersController extends AbstractController
         ]);
     }
 
+    #[Route('/contact', name: 'app_contact', methods: ['GET'])]
+    public function contact(Request $request, CategoriesRepository $categoriesRepository): Response
+    {
+        $cartQuantity = $this->cartQuantity($request);
+        $categories = $categoriesRepository->findAll();
+
+        return $this->render('users/contact.html.twig', [
+            'cartQuantity' => $cartQuantity,
+            'categories' => $categories,
+        ]);
+    }
+
     #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
