@@ -11,6 +11,7 @@
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.0/dist/alpine.js" defer></script>
             <script src="{{ asset('app.js') }}"></script>
         {% endblock %}
     </head>
@@ -18,7 +19,7 @@
             <div class="flex space-x-7 w-full">
                 <div class="flex-1">
                     <a href="{{ path('app_home') }}" class="flex items-center py-4 px-2">
-                        <span class="particle font-semibold text-gray-500 text-2xl">Shopfinity</span>
+                        <span class="particle font-semibold text-gray-500 text-3xl" style="font-style: italic;">Shopfinity</span>
                         <div id="particles-js" style="width: 950px; height: 50px; position: absolute;"></div>
                     </a>
                 </div>
