@@ -7,48 +7,36 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ProductsRepository;
 use App\Repository\CategoriesRepository;
+use App\Trait\CartTrait;
+use App\Trait\ProductsListTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
-    public function cartQuantity(Request $request): int
-    {
-        $session = $request->getSession();
-        $cart = $session->get('cart', []);
-        $cartQuantity = 0;
-        foreach ($cart as $quantity) {
-            $cartQuantity += $quantity;
-        }
-
-        return $cartQuantity;
-    }
+    use CartTrait;
+    use ProductsListTrait;
 
     #[Route('/home', name: 'app_home')]
-    public function index(ProductsRepository $productsRepository, CategoriesRepository $categoriesRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(CategoriesRepository $categoriesRepository, ProductsRepository $productsRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $cartQuantity = $this->cartQuantity($request);
-        $data = $productsRepository->findAll();
-
-        $products = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            6
-        );
-
         $categories = $categoriesRepository->findAll();
+        $productsList = $this->productsList($productsRepository, $paginator, $request);
 
         return $this->render('home/home.html.twig', [
-            'products' => $products,
             'cartQuantity' => $cartQuantity,
             'categories' => $categories,
+            'products' => $productsList,
         ]);
     }
 
     #[Route('/add-to-cart/{id}', name: 'app_add_to_cart', methods: ['POST'])]
-    public function addToCart(int $id, Request $request, ProductsRepository $productsRepository, CategoriesRepository $categoriesRepository, PaginatorInterface $paginator): Response
+    public function addToCart(int $id, Request $request, CategoriesRepository $categoriesRepository, ProductsRepository $productsRepository, PaginatorInterface $paginator): Response
     {
         $cartQuantity = $this->cartQuantity($request);
+        $categories = $categoriesRepository->findAll();
+        $productsList = $this->productsList($productsRepository, $paginator, $request);
         $session = $request->getSession();
         $cart = $session->get('cart', []);
     
@@ -58,22 +46,12 @@ class HomeController extends AbstractController
         $cart[$id]++;
     
         $session->set('cart', $cart);
-
-        $data = $productsRepository->findAll();
-
-        $products = $paginator->paginate(
-            $data,
-            $request->query->getInt('page', 1),
-            6
-        );
-
-        $categories = $categoriesRepository->findAll();
     
         return $this->render('home/home.html.twig', [
-            'cart' => $cart,
             'cartQuantity' => $cartQuantity,
-            'products' => $products,
             'categories' => $categories,
+            'products' => $productsList,
+            'cart' => $cart,
         ]);
     }
 }

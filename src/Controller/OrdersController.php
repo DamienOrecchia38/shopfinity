@@ -15,17 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CategoriesRepository;
+use App\Trait\CartTrait;
 
 #[Route('/orders')]
 class OrdersController extends AbstractController implements EventSubscriberInterface 
 {
+    use CartTrait;
     
     #[Route('/cart', name: 'app_cart_show', methods: ['GET'])]
     public function showCart(Request $request, EntityManagerInterface $entityManager, CategoriesRepository $categoriesRepository): Response
     {
         $session = $request->getSession();
         $cart = $session->get('cart', []);
-
         $products = [];
         $productRepository = $entityManager->getRepository(Products::class);
         foreach ($cart as $id => $quantity) {
@@ -40,11 +41,7 @@ class OrdersController extends AbstractController implements EventSubscriberInte
             $priceTotal += $item['product']->getPrice() * $item['quantity'];
         }
 
-        $cartQuantity = 0;
-        foreach ($cart as $quantity) {
-            $cartQuantity += $quantity;
-        }
-
+        $cartQuantity = $this->cartQuantity($request);
         $categories = $categoriesRepository->findAll();
 
         return $this->render('orders/cart.html.twig', [

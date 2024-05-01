@@ -11,21 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\CategoriesRepository;
+use App\Trait\CartTrait;
 
 #[Route('/users')]
 class UsersController extends AbstractController
 {
+    use CartTrait;
+
     #[Route('/account', name: 'app_account', methods: ['GET'])]
     public function account(Request $request, CategoriesRepository $categoriesRepository): Response
     {
         $user = $this->getUser();
-        $session = $request->getSession();
-        $cart = $session->get('cart', []);
-        $cartQuantity = 0;
-        foreach ($cart as $quantity) {
-            $cartQuantity += $quantity;
-        }
-
+        $cartQuantity = $this->cartQuantity($request);
         $categories = $categoriesRepository->findAll();
 
         return $this->render('users/account.html.twig', [
