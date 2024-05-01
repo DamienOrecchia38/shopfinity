@@ -17,7 +17,7 @@
     </head>
         <nav class="bg-white shadow-lg flex">
             <div class="flex space-x-7 w-full">
-                <div class="flex-1">
+                <div class="flex-1 ml-4">
                     <a href="{{ path('app_home') }}" class="flex items-center py-4 px-2">
                         <span class="particle font-semibold text-gray-500 text-3xl" style="font-style: italic;">Shopfinity</span>
                         <div id="particles-js" style="width: 950px; height: 50px; position: absolute;"></div>
@@ -25,7 +25,10 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-3 justify-end flex-grow">
                     <div class="group inline-block">
-                        <a href="{{ path('app_home') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_home' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Accueil</a>
+                        <a href="{{ path('app_home') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_home' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                            <img src="{{ asset('images/icons/icon_home.png') }}" alt="icone accueil" class="w-6 h-6 mr-2">
+                            Accueil
+                        </a>
                         <div class="hidden group-hover:block absolute bg-white shadow-lg">
                             {% for category in categories %}
                                 <a href="{{ path('app_home') }}" class="block py-2 px-4 text-sm text-gray-7000 hover:bg-gray-100">{{ category.title }}</a>
@@ -33,15 +36,28 @@
                         </div>
                     </div>
                     {% if app.user %}
-                        <a href="{{ path('app_account') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_account' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Mon compte</a>
-                        <a href="{{ path('app_cart_show') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_order' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">
-                            Panier <span class="bg-red-500 text-white rounded-full px-2">{{ cartQuantity }}</span>
+                        <a href="{{ path('app_account') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_account' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                            <img src="{{ asset('images/icons/icon_account.png') }}" alt="icone mon compte" class="w-6 h-6 mr-2">                        
+                        Mon compte
+                        </a>
+                        <a href="{{ path('app_cart_show') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_order' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                            <img src="{{ asset('images/icons/icon_cart.png') }}" alt="icone panier" class="w-6 h-6 mr-2">
+                            Panier <span class="bg-red-500 text-white rounded-full px-2 ml-2">{{ cartQuantity }}</span>
                         </a>
                     {% else %}
-                        <a href="{{ path('app_login') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_login' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">Se connecter</a>
-                        <a href="{{ path('app_register') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_register' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300">S'inscrire</a>
+                        <a href="{{ path('app_login') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_login' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                        <img src="{{ asset('images/icons/icon_login.png') }}" alt="icone connexion" class="w-6 h-6 mr-2">
+                        Se connecter
+                        </a>
+                        <a href="{{ path('app_register') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_register' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                        <img src="{{ asset('images/icons/icon_register.png') }}" alt="icone inscription" class="w-6 h-6 mr-2">
+                        S'inscrire
+                        </a>
                     {% endif %}
-                    <a href="{{ path('app_contact') }}" class="py-4 px-3 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Contact</a>
+                    <a href="{{ path('app_contact') }}" class="py-4 px-3 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-lg">
+                    <img src="{{ asset('images/icons/icon_contact.png') }}" alt="icone contact" class="w-6 h-6 mr-2">
+                    Contact
+                    </a>
                     {% if app.user %}
                         <div class="bg-customYellow text-customBrownYellow font-bold rounded-t px-4 py-2 mb-4">Bonjour {{ app.user.name }} ! <a href="{{ path('app_logout') }}" class="underline">Déconnexion</a></div>
                     {% endif %}
