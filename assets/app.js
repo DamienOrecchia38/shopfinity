@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     particlesJS("particles-js", {
         "particles": {
             "number": {
-                "value": 800,
+                "value": 1000,
                 "density": {
                     "enable": true,
-                    "value_area": 800
+                    "value_area": 1000
                 }
             },
             "color": {
@@ -144,3 +144,18 @@ function confirmPurchase(event) {
         }
     });
 }
+
+function showPopup() {
+    swal({
+      title: 'Tic.. Tac.. Promotion INCROYABLE !',
+      text: 'Il ne reste que 9 minutes pour profiter de nos offres limitées !',
+      icon: 'info',
+      button: 'Trop cool'
+    });
+  }
+  
+  if (window.location.pathname === '/home') {
+    window.onload = function() {
+      showPopup();
+    }
+  }
