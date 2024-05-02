@@ -34,69 +34,7 @@
         </button>
     </div>
 
-    <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {% for product in products %}
-            <div class="rounded overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out relative hover:bg-gray-50">
-                <img class="w-full transition duration-300 ease-in-out hover:blur-sm" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
-                <div class="px-6 pt-4 pb-2 flex">
-                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
-                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mr-2 mb-2">
-                        {% if product.available %}
-                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L10 12.586l7.293-7.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-                            En stock
-                        {% else %}
-                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-11.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"></path></svg>
-                            Victime de son succès !
-                        {% endif %}
-                    </span>
-                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-2 mt-2">{{ product.categories.title }}</span>
-                </div>
-                <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2">{{ product.title }}</div>
-                    <p class="text-gray-700 text-base">
-                        {{ product.description|striptags }}
-                    </p>
-                </div>                
-                <div class="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100">
-                    <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 rounded">Voir</a>
-                    <form class="ml-2 buyButton" action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
-                        {% if product.available %}
-                            <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-green-500 to-green-700 text-white font-bold py-2 px-4 rounded">Ajouter</button>
-                        {% else %}
-                            <button type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded" disabled>Indisponible</button>
-                        {% endif %}
-                    </form>
-                </div>
-            </div>
-        {% else %}
-            <div class="col-span-4 text-center py-2">
-                Aucun article n'a été trouvé.
-            </div>
-        {% endfor %}
-        
-        {% set paginationData = products.getPaginationData() %}
-
-        {% if paginationData.pageCount > 1 %}
-            <div class="flex justify-center items-center w-full">
-                <ul class="inline-flex -space-x-px text-base h-10 justify-center w-full">
-                    {% if paginationData.previous is defined %}
-                        <li>
-                            <a href="{{ path('app_home', {'page': paginationData.previous}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Précédent</a>
-                        </li>
-                    {% endif %}
-                    {% for page in paginationData.pagesInRange %}
-                        <li>
-                            <a href="{{ path('app_home', {'page': page}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ page == paginationData.current ? 'text-blue-600 bg-blue-50 hover:bg-blue-100' : '' }}">{{ page }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if paginationData.next is defined %}
-                        <li>
-                            <a href="{{ path('app_home', {'page': paginationData.next}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Suivant</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        {% endif %}
-    </div>
+    {% include 'products/products_list.html.twig' %}
+    {% include 'pagination/pagination.html.twig' %}
 
 {% endblock %}

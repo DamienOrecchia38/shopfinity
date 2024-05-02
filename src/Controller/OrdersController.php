@@ -4,9 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Orders;
 use App\Entity\Products;
-use App\Form\OrdersType;
-use App\Repository\OrdersRepository;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,11 +33,7 @@ class OrdersController extends AbstractController implements EventSubscriberInte
             }
         }
 
-        $priceTotal = 0;
-        foreach ($products as $item) {
-            $priceTotal += $item['product']->getPrice() * $item['quantity'];
-        }
-
+        $priceTotal = $this->priceTotal($request, $entityManager);
         $cartQuantity = $this->cartQuantity($request);
         $categories = $categoriesRepository->findAll();
 
@@ -70,25 +63,27 @@ class OrdersController extends AbstractController implements EventSubscriberInte
         return $this->redirectToRoute('app_cart_show');
     }
 
-    // #[Route('/new', name: 'app_orders_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, EntityManagerInterface $entityManager): Response
-    // {
-    //     $order = new Orders();
-    //     $form = $this->createForm(OrdersType::class, $order);
-    //     $form->handleRequest($request);
+     #[Route('/create', name: 'app_orders_create', methods: ['POST'])]
+    public function createOrder(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $quantity = $this->cartQuantity($request);
+        $priceTotal = $this->priceTotal($request, $entityManager);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($order);
-    //         $entityManager->flush();
+        $order = new Orders();
+        $order->setCreatedAt(new \DateTime());
+        $order->setUsers($this->getUser());
+        $order->setOrderNumber(mt_rand(100000, 999999));
+        $order->setQuantity($quantity);
+        $order->setTotal($priceTotal);
 
-    //         return $this->redirectToRoute('app_orders_index', [], Response::HTTP_SEE_OTHER);
-    //     }
+        $entityManager->persist($order);
+        $entityManager->flush();
 
-    //     return $this->render('orders/new.html.twig', [
-    //         'order' => $order,
-    //         'form' => $form,
-    //     ]);
-    // }
+        $session = $request->getSession();
+        $session->set('cart', []);
+
+        return $this->redirectToRoute('app_account');
+    }
 
     public static function getSubscribedEvents()
     {

@@ -17,6 +17,8 @@ class OrdersFixture extends AbstractFixture implements DependentFixtureInterface
             $order->setUsers($this->getReference('user_' . $this->faker->numberBetween(0, 4)));
             $order->setCreatedAt($this->faker->dateTimeBetween('-1 years', 'now'));
             $order->setOrderNumber($this->faker->randomNumber(5, true));
+            $order->setQuantity($this->faker->numberBetween(1, 10));
+            $order->setTotal($this->faker->randomFloat(2, 10, 1000));
             $manager->persist($order);
         }
     $manager->flush();

@@ -1,0 +1,44 @@
+{% block productsList %}
+
+    <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {% for product in products %}
+
+            <div class="rounded overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out relative hover:bg-gray-80">
+                <img class="w-full" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
+                <div class="px-6 pt-4 pb-2 flex">
+                    {% if product.available %}
+                        <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 mb-3 rounded-l">Voir</a>
+                        <form class="buyButton mr-3" action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
+                                <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-green-500 to-green-700 text-white font-bold py-2 px-4 rounded-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 inline-block"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"></path></svg>
+                                </button>
+                        </form>
+                    {% else %}
+                        <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 mr-3 mb-3 rounded">Voir</a>
+                    {% endif %}
+                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-3 mb-2">{{ product.price }} €</span>
+                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mb-2">
+                        {% if product.available %}
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L10 12.586l7.293-7.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                            En stock
+                        {% else %}
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-11.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"></path></svg>
+                            Victime de son succès !
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{ product.title }}</div>
+                    <p class="text-gray-700 text-base">
+                        {{ product.description|striptags }}
+                    </p>
+                </div>                
+            </div>
+        {% else %}
+            <div class="col-span-4 text-center py-2">
+                Aucun article n'a été trouvé.
+            </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

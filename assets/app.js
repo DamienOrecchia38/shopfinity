@@ -1,8 +1,15 @@
 
 document.addEventListener('DOMContentLoaded', function() {
+
     const buyButtons = document.getElementsByClassName('buyButton');
+    const confirmCartButton = document.getElementsByClassName('confirmCartButton');
+
     Array.from(buyButtons).forEach(button => {
         button.addEventListener('submit', confirmPurchase);
+    });
+
+    Array.from(confirmCartButton).forEach(button => {
+        button.addEventListener('submit', confirmCart);
     });
 
     particlesJS("particles-js", {
@@ -127,8 +134,7 @@ function confirmPurchase(event) {
     const form = event.target;
 
     swal({
-        title: "Êtes-vous sûr ?",
-        text: "Voulez-vous ajouter cet article à votre panier ?",
+        title: "Êtes-vous sûr d'ajouter cet article à votre panier ?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -145,6 +151,28 @@ function confirmPurchase(event) {
     });
 }
 
+function confirmCart(event) {
+    event.preventDefault();
+    const form = event.target;
+
+    swal({
+        title: "Êtes-vous sûr d'avoir fini vos achats ?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willValidate) => {
+        if (willValidate) {
+            swal("Votre commande a été validé !", {
+                icon: "success",
+            }).then(() => {
+                form.submit();
+            });
+        } else {
+            swal("La validation a été annulée.");
+        }
+    });
+}
+
 function showPopup() {
     swal({
       title: 'Tic..Tac.. Promotions INCROYABLES !',
@@ -154,7 +182,7 @@ function showPopup() {
     });
   }
   
-  if (window.location.pathname === '/home') {
+  if (window.location.pathname === '/users/contact') {
     window.onload = function() {
       showPopup();
     }

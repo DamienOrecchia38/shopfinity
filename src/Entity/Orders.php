@@ -37,6 +37,12 @@ class Orders
     #[ORM\Column(length: 255)]
     private ?string $order_number = null;
 
+    #[ORM\Column]
+    private ?int $quantity = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $total = null;
+
     public function __construct()
     {
         $this->relation_orders_products = new ArrayCollection();
@@ -103,6 +109,30 @@ class Orders
     public function setOrderNumber(string $order_number): static
     {
         $this->order_number = $order_number;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getTotal(): ?string
+    {
+        return $this->total;
+    }
+
+    public function setTotal(string $total): static
+    {
+        $this->total = $total;
 
         return $this;
     }
