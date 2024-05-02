@@ -18,7 +18,16 @@ body {
       animation-timing-function: cubic-bezier(0,0,0.2,1);
     }
   }
+
+  @keyframes swing {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+}
   
   .animate-bounce {
     animation: bounce 1s infinite;
   }
+
+  .fa-swing {
+    animation: swing 1s infinite alternate;
+}

@@ -21,7 +21,7 @@
                 <div class="flex-1 ml-4">
                     <a href="{{ path('app_home') }}" class="flex items-center py-4 px-2">
                         <span class="particle font-semibold text-gray-500 text-3xl" style="font-style: italic;">Shopfinity</span>
-                        <div id="particles-js" style="width: 950px; height: 50px; position: absolute;"></div>
+                        <div id="particles-js" style="width: 850px; height: 50px; position: absolute;"></div>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-3 justify-end flex-grow">
@@ -32,7 +32,7 @@
                         </a>
                         <div class="hidden group-hover:block absolute bg-white shadow-lg">
                             {% for category in categories %}
-                                <a href="{{ path('app_home') }}" class="block py-2 px-4 text-sm text-gray-7000 hover:bg-gray-100">{{ category.title }}</a>
+                                <a href="{{ path('app_home') }}" class="block py-2 px-4 text-lg text-gray-7000 hover:bg-gray-100">{{ category.title }}</a>
                             {% endfor %}
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                     Contact
                     </a>
                     {% if app.user %}
-                        <div class="bg-customYellow text-customBrownYellow font-bold rounded-t px-4 py-2 mb-4">Bonjour {{ app.user.name }} ! <a href="{{ path('app_logout') }}" class="underline">Déconnexion</a></div>
+                        <div class="bg-customYellow text-customBrownYellow text-lg font-bold rounded-t px-4 py-2 mb-4">Bonjour {{ app.user.name }} ! <a href="{{ path('app_logout') }}" class="underline">Déconnexion</a></div>
                     {% endif %}
                 </div>
             </div>

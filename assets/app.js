@@ -147,7 +147,7 @@ function confirmPurchase(event) {
 
 function showPopup() {
     swal({
-      title: 'Tic.. Tac.. Promotion INCROYABLE !',
+      title: 'Tic..Tac.. Promotions INCROYABLES !',
       text: 'Il ne reste que 9 minutes pour profiter de nos offres limitées !',
       icon: 'info',
       button: 'Trop cool'

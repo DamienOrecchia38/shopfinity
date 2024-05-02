@@ -4,81 +4,98 @@
 
 {% block body %}
 
-        <div x-data="{ activeSlide: 0, slides: [
-            '{{ asset('images/carousel/image_carousel_1.jpg') }}',
-            '{{ asset('images/carousel/image_carousel_2.jpg') }}',
-            '{{ asset('images/carousel/image_carousel_3.jpg') }}'
-        ] }" class="relative w-full" data-carousel="slide" x-init="setInterval(() => { activeSlide = activeSlide < slides.length - 1 ? activeSlide + 1 : 0 }, 8000)">
-            <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-                <template x-for="(slide, index) in slides" :key="index">
-                    <div x-show="activeSlide === index" class="duration-700 ease-in-out" data-carousel-item>
-                        <img :src="slide" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="sunset banner">
-                    </div>
-                </template>
-            </div>
-
-            <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" @click="activeSlide = activeSlide > 0 ? activeSlide - 1 : slides.length - 1">
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                    </svg>
-                    <span class="sr-only">Précédent</span>
-                </span>
-            </button>
-            
-            <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" @click="activeSlide = activeSlide < slides.length - 1 ? activeSlide + 1 : 0">
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                    <span class="sr-only">Suivant</span>
-                </span>
-            </button>
+    <div x-data="{ activeSlide: 0, slides: [
+        '{{ asset('images/carousel/image_carousel_1.jpg') }}',
+        '{{ asset('images/carousel/image_carousel_2.jpg') }}',
+        '{{ asset('images/carousel/image_carousel_3.jpg') }}'
+    ] }" class="relative w-full" data-carousel="slide" x-init="setInterval(() => { activeSlide = activeSlide < slides.length - 1 ? activeSlide + 1 : 0 }, 8000)">
+        <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+            <template x-for="(slide, index) in slides" :key="index">
+                <div x-show="activeSlide === index" class="duration-700 ease-in-out" data-carousel-item>
+                    <img :src="slide" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="sunset banner">
+                </div>
+            </template>
         </div>
 
-    <div class="flex-1">
-        <div class="mx-7">
-            <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {% for product in products %}
-                    <div class="border rounded overflow-hidden shadow-lg bg-white">
-                        <img class="w-full" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">{{ product.title }}</div>
-                            <p class="text-gray-700 text-base">
-                                {{ product.description|striptags }}
-                            </p>
-                        </div>
-                        <div class="px-6 pt-4 pb-2 flex">
-                            <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
-                            <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mr-2 mb-2">
-                                {% if product.available %}
-                                    <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L10 12.586l7.293-7.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-                                    En stock
-                                {% else %}
-                                    <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-11.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"></path></svg>
-                                    Victime de son succès
-                                {% endif %}
-                            </span>
-                        </div>
-                        <div class="px-6 pt-4 pb-2 flex">
-                            <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 rounded ml-2">Voir</a>
-                            <form class="ml-2 buyButton" action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
-                                {% if product.available %}
-                                    <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-green-500 to-green-700 text-white font-bold py-2 px-4 rounded">Acheter</button>
-                                {% else %}
-                                    <button type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded" disabled>Indisponible</button>
-                                {% endif %}
-                            </form>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="col-span-4 text-center py-2">
-                        Aucun article n'a été trouvé.
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="mt-4">{{ knp_pagination_render(products) }}</div>
-            </div>
-        </div>
+        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" @click="activeSlide = activeSlide > 0 ? activeSlide - 1 : slides.length - 1">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+            </span>
+        </button>
+        
+        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" @click="activeSlide = activeSlide < slides.length - 1 ? activeSlide + 1 : 0">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+            </span>
+        </button>
     </div>
+
+    <div class="sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {% for product in products %}
+            <div class="rounded overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out relative hover:bg-gray-50">
+                <img class="w-full transition duration-300 ease-in-out hover:blur-sm" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
+                <div class="px-6 pt-4 pb-2 flex">
+                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold text-gray-700 mr-2 mb-2">{{ product.price }} €</span>
+                    <span class="inline-block bg-gray-200 rounded-full px-4 py-2 text-lg font-semibold {{ product.available ? 'text-green-500' : 'text-red-500' }} mr-2 mb-2">
+                        {% if product.available %}
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 011.414 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L10 12.586l7.293-7.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                            En stock
+                        {% else %}
+                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-11.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"></path></svg>
+                            Victime de son succès !
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{ product.title }}</div>
+                    <p class="text-gray-700 text-base">
+                        {{ product.description|striptags }}
+                    </p>
+                </div>                
+                <div class="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100">
+                    <a href="{{ path('app_products_show', {'id': product.id}) }}" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold py-2 px-4 rounded">Voir</a>
+                    <form class="ml-2 buyButton" action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
+                        {% if product.available %}
+                            <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-green-500 to-green-700 text-white font-bold py-2 px-4 rounded">Ajouter</button>
+                        {% else %}
+                            <button type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded" disabled>Indisponible</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-4 text-center py-2">
+                Aucun article n'a été trouvé.
+            </div>
+        {% endfor %}
+        
+        {% set paginationData = products.getPaginationData() %}
+
+        {% if paginationData.pageCount > 1 %}
+            <div class="flex justify-center items-center w-full">
+                <ul class="inline-flex -space-x-px text-base h-10 justify-center w-full">
+                    {% if paginationData.previous is defined %}
+                        <li>
+                            <a href="{{ path('app_home', {'page': paginationData.previous}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Précédent</a>
+                        </li>
+                    {% endif %}
+                    {% for page in paginationData.pagesInRange %}
+                        <li>
+                            <a href="{{ path('app_home', {'page': page}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ page == paginationData.current ? 'text-blue-600 bg-blue-50 hover:bg-blue-100' : '' }}">{{ page }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if paginationData.next is defined %}
+                        <li>
+                            <a href="{{ path('app_home', {'page': paginationData.next}) }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Suivant</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
 {% endblock %}
