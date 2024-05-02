@@ -8,12 +8,15 @@ class UsersFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
-        $adminUser = new Users();
-        $adminUser->setEmail('damien@gmail.com');
-        $adminUser->setRoles(['ROLE_ADMIN']);
-        $adminUser->setName('Damien');
-        $adminUser->setPassword('$2y$13$U8SGgqEF/Z4Jhaeh/7888esUUEkaqkUiHpdXdBSCpVntyJojHPD/S');
-        $manager->persist($adminUser);
+        $existingUser = $manager->getRepository(Users::class)->findOneByEmail('damien@gmail.com');
+        if (!$existingUser) {
+            $adminUser = new Users();
+            $adminUser->setEmail('damien@gmail.com');
+            $adminUser->setRoles(['ROLE_ADMIN']);
+            $adminUser->setName('Damien');
+            $adminUser->setPassword('$2y$13$U8SGgqEF/Z4Jhaeh/7888esUUEkaqkUiHpdXdBSCpVntyJojHPD/S');
+            $manager->persist($adminUser);
+        }
 
         for ($i = 0; $i < 5; $i ++) {
             $user = new Users();
