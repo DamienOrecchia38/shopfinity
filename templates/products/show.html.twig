@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page produit{% endblock %}
+
+{% block body %}
+
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-7xl p-5">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex md:flex-row flex-col transform hover:scale-105 transition-transform duration-300">
+                <div class="w-full bg-cover"> 
+                    <img class="w-full h-full object-cover" src="{{ asset('images/products/' ~ product.imageName) }}" alt="Image de {{ product.title }}">
+                </div>
+                <div class="md:w-3/4 w-full p-5">
+                    <h1 class="text-gray-900 font-bold text-3xl text-center mt-8 mb-6">{{ product.title }}</h1>
+                    <p class="mt-12 text-gray-600 text-md">{{ product.description }}</p>
+                    <div class="flex item-center mt-12 space-x-4">
+                        <p class="text-gray-900 font-bold text-2xl">{{ product.price }}€</p>
+                        <h1 class="{{ product.available ? 'text-green-500' : 'text-red-500' }} font-bold text-2xl">{{ product.available ? 'En stock' : 'Rupture de stock' }}</h1>
+                    </div>
+                    <div class="flex item-center mt-12 space-x-4">
+                        <a href="{{ path('app_home') }}" class="text-2xl bg-gradient-to-r from-yellow-500 to-yellow-700 text-white px-3 py-3 rounded-md hover:bg-gradient-to-l from-yellow-700 to-yellow-500 font-bold">Retour</a>
+                        {% if product.available %}
+                        <form action="{{ path('app_add_to_cart', {'id': product.id}) }}" method="post">
+                            <button type="submit" class="text-2xl bg-gradient-to-r from-green-500 to-green-700 text-white px-3 py-3 rounded-md hover:bg-gradient-to-l from-green-700 to-green-500 font-bold">Ajouter au panier</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

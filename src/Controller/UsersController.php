@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Users;
-use App\Form\UsersType;
-use App\Repository\UsersRepository;
+use App\Repository\OrdersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\CategoriesRepository;
 use App\Trait\CartTrait;
 
 #[Route('/users')]
@@ -19,28 +17,33 @@ class UsersController extends AbstractController
     use CartTrait;
 
     #[Route('/account', name: 'app_account', methods: ['GET'])]
-    public function account(Request $request, CategoriesRepository $categoriesRepository): Response
+    public function account(Request $request, Users $user, OrdersRepository $ordersRepository): Response
     {
         $user = $this->getUser();
         $cartQuantity = $this->cartQuantity($request);
-        $categories = $categoriesRepository->findAll();
+        $allOrders = $ordersRepository->findAll();
+        $userOrders = [];
+    
+        foreach ($allOrders as $order) {
+            if ($order->getUsers()->getId() === $user->getId()) {
+                $userOrders[] = $order;
+            }
+        }
 
         return $this->render('users/account.html.twig', [
             'user' => $user,
+            'userOrders' => $userOrders,
             'cartQuantity' => $cartQuantity,
-            'categories' => $categories,
         ]);
     }
 
     #[Route('/contact', name: 'app_contact', methods: ['GET'])]
-    public function contact(Request $request, CategoriesRepository $categoriesRepository): Response
+    public function contact(Request $request): Response
     {
         $cartQuantity = $this->cartQuantity($request);
-        $categories = $categoriesRepository->findAll();
 
         return $this->render('users/contact.html.twig', [
             'cartQuantity' => $cartQuantity,
-            'categories' => $categories,
         ]);
     }
 
@@ -56,9 +59,12 @@ class UsersController extends AbstractController
             return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        $cartQuantity = $this->cartQuantity($request);
+
         return $this->render('users/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+            'cartQuantity' => $cartQuantity,
         ]);
     }
 
@@ -70,6 +76,6 @@ class UsersController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

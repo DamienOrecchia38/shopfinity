@@ -16,7 +16,8 @@
             <script src="{{ asset('app.js') }}"></script>
         {% endblock %}
     </head>
-        <nav class="bg-white shadow-lg flex">
+
+        <nav class="bg-zinc-50 shadow-lg flex">
             <div class="flex space-x-7 w-full">
                 <div class="flex-1 ml-4">
                     <a href="{{ path('app_home') }}" class="flex items-center py-4 px-2">
@@ -30,11 +31,6 @@
                             <img src="{{ asset('images/icons/icon_home.png') }}" alt="icone accueil" class="w-8 h-8 mr-3">
                             Accueil
                         </a>
-                        <div class="hidden group-hover:block absolute bg-white shadow-lg">
-                            {% for category in categories %}
-                                <a href="{{ path('app_home') }}" class="block py-2 px-4 text-xl text-gray-7000 hover:bg-gray-100">{{ category.title }}</a>
-                            {% endfor %}
-                        </div>
                     </div>
                     {% if app.user %}
                         <a href="{{ path('app_account') }}" class="py-4 px-3 text-gray-500 {{ app.request.attributes.get('_route') == 'app_account' ? 'border-b-4 border-customBrownYellow' : '' }} font-semibold hover:text-customBrownYellow transition duration-300 flex items-center text-xl">
@@ -65,7 +61,6 @@
                 </div>
             </div>
 
-            <!-- mobile menu -->
             <div class="md:hidden flex items-center">
                 <button class="outline-none mobile-menu-button">
                 <svg class=" w-6 h-6 text-gray-500 hover:text-green-500 "
@@ -80,28 +75,25 @@
                 </svg>
                 </button>
             </div>
+
+            <div class="hidden mobile-menu">
+                <ul class="">
+                    <li class="active"><a href="{{ path('app_home') }}" class="block text-sm px-2 py-4 text-white bg-gray-500 font-semibold">Accueil</a></li>
+                    {% if app.user %}
+                        <a href="{{ path('app_account') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Mon compte</a>
+                        <a href="{{ path('app_cart_show') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Panier</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Se connecter</a>
+                        <a href="{{ path('app_register') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">S'inscrire</a>
+                    {% endif %}
+                    <li><a href="about" class="block text-sm px-2 py-4 hover:bg-customBrownYellow transition duration-300">À propos</a></li>
+                </ul>
+            </div>
         </nav>
 
-        <!-- mobile menu -->
-        <div class="hidden mobile-menu">
-            <ul class="">
-                <li class="active"><a href="{{ path('app_home') }}" class="block text-sm px-2 py-4 text-white bg-gray-500 font-semibold">Accueil</a></li>
-                {% if app.user %}
-                    <a href="{{ path('app_account') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Mon compte</a>
-                    <a href="{{ path('app_cart_show') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Panier</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">Se connecter</a>
-                    <a href="{{ path('app_register') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-customBrownYellow transition duration-300">S'inscrire</a>
-                {% endif %}
-                <li><a href="#about" class="block text-sm px-2 py-4 hover:bg-customBrownYellow transition duration-300">À propos</a></li>
-                <li><a href="#contact" class="block text-sm px-2 py-4 hover:bg-customBrownYellow transition duration-300">Contact</a></li>
-            </ul>
-        </div>
+
 
     <body>
         {% block body %}{% endblock %}
-        {# <footer class="bg-gray-200 text-center text-xs p-3 absolute bottom-0 w-full">
-            © 2024 Shopfinity. Tous droits réservés.
-        </footer> #}
     </body>
 </html>

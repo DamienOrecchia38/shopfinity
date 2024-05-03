@@ -10,7 +10,7 @@ class ProductsFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; $i ++) {
+        for ($i = 0; $i < 20; $i ++) {
             $product = new Products();
             $product->setTitle($this->faker->sentence(3));
             $product->setPrice($this->faker->randomFloat(2, 1, 1000));

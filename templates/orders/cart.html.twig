@@ -5,8 +5,8 @@
 {% block body %}
 
     <div class="flex justify-center items-center min-h-screen">
-        <div class="w-full max-w-4xl bg-white p-6 rounded-lg shadow" style="height: auto; min-height: 80vh;">
-            <h1 class="text-4xl font-bold mb-8 text-center"><i class="fas fa-shopping-cart fa-swing"></i> Votre commande</h1>
+        <div class="w-full max-w-4xl bg-white p-6 rounded-lg shadow mt-4 mb-4" style="height: auto; min-height: 80vh;">
+            <h1 class="text-4xl font-bold mb-8 mt-4 text-center"><i class="fas fa-shopping-cart fa-swing"></i> Votre commande</h1>
 
             {% if products is empty %}
                 <p class="text-gray-700 text-lg text-center my-8">Votre panier est tristement vide.</p>
@@ -15,35 +15,37 @@
                     <table class="min-w-full">
                         <thead class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white font-bold">
                             <tr>
-                                <th class="w-1/3 text-left py-4 px-6 uppercase font-semibold text-lg">Produit</th>
-                                <th class="w-1/3 text-left py-4 px-6 uppercase font-semibold text-lg">Quantité</th>
-                                <th class="text-left py-4 px-6 uppercase font-semibold text-lg">Prix</th>
-                                <th class="text-left py-4 px-6 uppercase font-semibold text-lg"></th>
+                                <th class="w-1/3 text-left py-4 px-6 uppercase font-semibold text-lg mt-4 mb-4">Produit</th>
+                                <th class="w-1/3 text-left py-4 px-6 uppercase font-semibold text-lg mt-4 mb-4">Quantité</th>
+                                <th class="text-left py-4 px-6 uppercase font-semibold text-lg mt-4 mb-4">Prix</th>
+                                <th class="text-left py-4 px-6 uppercase font-semibold text-lg mt-4 mb-4"></th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 text-lg">
                             {% for item in products %}
                                 <tr>
-                                    <td class="w-1/3 text-left py-4 px-6">{{ item.product.title }}</td>
-                                    <td class="w-1/3 text-left py-4 px-6">{{ item.quantity }}</td>
-                                    <td class="text-left py-4 px-6">{{ item.product.price }} €</td>
-                                    <td class="text-left py-4 px-6">
+                                    <td class="w-1/3 text-left py-4 px-6 mt-4 mb-4">{{ item.product.title }}</td>
+                                    <td class="w-1/3 text-left py-4 px-6 mt-4 mb-4">{{ item.quantity }}</td>
+                                    <td class="text-left py-4 px-6 mt-4 mb-4">{{ item.product.price }} €</td>
+                                    <td class="text-left py-4 px-6 mt-4 mb-4">
                                         <form action="{{ path('app_remove_from_cart', {'id': item.product.id}) }}" method="post">
-                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
+                                            <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-red-500 to-red-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4">Supprimer</button>
                                         </form>
                                     </td>
                                 </tr>
                             {% endfor %}
                             <tr>
-                                <td colspan="2" class="text-right py-4">Montant total de vos achats : </td>
-                                <td> {{ priceTotal }} €</td>
+                                <td colspan="3" class="text-right text-lg py-4 px-6 mt-4 mb-4">
+                                    Montant total :
+                                    <span class="font-bold text-xl">{{ priceTotal }} € </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="flex justify-center">
+                <div class="flex justify-center mt-4 mb-4">
                     <form class="confirmCartButton" action="{{ path('app_orders_create') }}" method="post">
-                        <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white text-lg font-bold py-3 px-6 rounded">Valider ma commande</button>
+                        <button type="submit" class="bg-gradient-to-r hover:bg-gradient-to-l from-yellow-500 to-customStrongYellow text-white text-lg font-bold py-3 px-6 rounded mt-4 mb-4">Valider ma commande</button>
                     </form>                
                 </div>
             {% endif %}

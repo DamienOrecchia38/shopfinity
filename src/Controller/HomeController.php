@@ -22,7 +22,8 @@ class HomeController extends AbstractController
     {
         $cartQuantity = $this->cartQuantity($request);
         $categories = $categoriesRepository->findAll();
-        $productsList = $this->productsList($productsRepository, $paginator, $request);
+        $categoryId = $request->query->get('category');
+        $productsList = $this->productsList($productsRepository, $paginator, $request, $categoryId);
 
         return $this->render('home/home.html.twig', [
             'cartQuantity' => $cartQuantity,

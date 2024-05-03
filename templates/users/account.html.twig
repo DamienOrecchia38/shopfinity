@@ -3,46 +3,49 @@
 {% block title %}Mon compte{% endblock %}
 
 {% block body %}
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-semibold text-gray-800">Tableau de bord</h1>
-
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-lg">
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
             <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-700">Informations personnelles</h2>
+
+                <h2 class="text-4xl font-bold mb-12 mt-4 text-center">Informations personnelles</h2>
+
                 <div class="mt-4">
                     <p class="font-bold text-gray-600">Email :</p>
                     <p>{{ user.email }}</p>
                     <p class="font-bold text-gray-600 mt-2">Nom :</p>
                     <p>{{ user.name }}</p>
-                    <p class="font-bold text-gray-600 mt-2">Date de création :</p>
-                    <p>{{ user.createdAt ? user.createdAt|date('Y-m-d') : 'Non spécifié' }}</p>
+                    <p class="font-bold text-gray-600 mt-2">Date de création du compte :</p>
+                    <p>{{ user.createdAt ? user.createdAt|date('d-m-Y') : 'Non spécifié' }}</p>
                 </div>
+
+                <div class="mt-4">
+                    <a href="{{ path('app_users_update_password', {'id': user.id}) }}" class="block text-blue-500 hover:text-blue-700 text-lg">Changer de mot de passe</a>
+                    <a href="{{ path('app_users_edit', {'id': user.id}) }}" class="block text-blue-500 hover:text-blue-700 text-lg">Modifier mes informations</a>
+                    <a href="{{ path('app_users_delete', {'id': user.id}) }}" class="block text-blue-500 hover:text-blue-700 text-lg">Supprimer mon compte</a>
+                </div>
+
+                {% if 'ROLE_ADMIN' in user.roles %}
+                    <div class="mt-4">
+                        <a href="{{ path('admin') }}" class="block text-red-500 hover:text-red-700 text-lg">Accéder à l'espace admin</a>
+                    </div>
+                {% endif %}
             </div>
 
             <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-700">Mes commandes</h2>
+                <h2 class="text-4xl font-bold mb-12 mt-4 text-center">Mes commandes</h2>
                 <div class="mt-4">
-                    {# {% if user.orders|length > 0 %}
+                    {% if userOrders|length > 0 %}
                         <ul>
-                            {% for order in user.orders %}
-                                <li>
-                                    Commande n°{{ order.id }} - Date: {{ order.date|date('Y-m-d') }} - Total: {{ order.total }} €
+                            {% for order in userOrders %}
+                                <li class="text-lg">
+                                    • Commande n° <strong>{{ order.orderNumber }}</strong> - Date: {{ order.createdAt|date('d-m-Y') }} - Total : <strong>{{ order.total }} €</strong>
                                 </li>
+                                <br>
                             {% endfor %}
                         </ul>
                     {% else %}
                         <p>Vous n'avez pas encore passé de commande.</p>
-                    {% endif %} #}
-                </div>
-            </div>
-
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-xl font-semibold text-gray-700">Paramètres</h2>
-                <div class="mt-4">
-                    <a href="#" class="block text-blue-500 hover:text-blue-700">Changer de mot de passe</a>
-                    <a href="{{ path('app_users_edit', {'id': user.id}) }}" class="block text-blue-500 hover:text-blue-700">Modifier mes informations</a>
-                    <a href="#" class="block text-blue-500 hover:text-blue-700">Supprimer mon compte</a>
-                    <a href="{{ path('app_logout') }}" class="block text-blue-500 hover:text-blue-700">Se déconnecter</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

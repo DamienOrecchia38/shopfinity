@@ -11,7 +11,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\CategoriesRepository;
 use App\Trait\CartTrait;
 
 #[Route('/orders')]
@@ -20,7 +19,7 @@ class OrdersController extends AbstractController implements EventSubscriberInte
     use CartTrait;
     
     #[Route('/cart', name: 'app_cart_show', methods: ['GET'])]
-    public function showCart(Request $request, EntityManagerInterface $entityManager, CategoriesRepository $categoriesRepository): Response
+    public function showCart(Request $request, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
         $cart = $session->get('cart', []);
@@ -35,13 +34,11 @@ class OrdersController extends AbstractController implements EventSubscriberInte
 
         $priceTotal = $this->priceTotal($request, $entityManager);
         $cartQuantity = $this->cartQuantity($request);
-        $categories = $categoriesRepository->findAll();
 
         return $this->render('orders/cart.html.twig', [
             'products' => $products,
             'priceTotal' => $priceTotal,
             'cartQuantity' => $cartQuantity,
-            'categories' => $categories,
         ]);
     }
 

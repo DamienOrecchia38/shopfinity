@@ -7,15 +7,20 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 trait ProductsListTrait {
-    public function productsList(ProductsRepository $productsRepository, PaginatorInterface $paginator, Request $request): object
+    public function productsList(ProductsRepository $productsRepository, PaginatorInterface $paginator, Request $request, ?int $categoryId = null)
     {
-        $data = $productsRepository->findAll();
+        $queryBuilder = $productsRepository->createQueryBuilder('p');
+        if ($categoryId) {
+            $queryBuilder->andWhere('p.categories = :categoryId')->setParameter('categoryId', $categoryId);
+        }
+        $query = $queryBuilder->getQuery();
+    
         $productsList = $paginator->paginate(
-            $data,
+            $query,
             $request->query->getInt('page', 1),
             8
         );
-
+    
         return $productsList;
     }
 }
