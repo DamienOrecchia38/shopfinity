@@ -35,13 +35,13 @@
     </div>
     
     <div class="py-6 flex flex-wrap justify-around w-full">
-        <a href="{{ path('app_home') }}" class="inline-block my-2 text-xl text-zinc-50 font-bold">Tous les articles</a>
+        <a href="{{ path('app_home') }}" class="neon inline-block my-2 text-xl text-zinc-50 font-bold">Tous les articles</a>
         {% set displayed_titles = [] %}
         {% for category in categories %}
             {% if category.title not in displayed_titles %}
-                <a href="{{ path('app_home', {'category': category.id}) }}" class="inline-block my-2 text-xl text-zinc-50 font-bold">
+                <a href="{{ path('app_home', {'category': category.id}) }}" class="{% if app.request.query.get('category') == category.id %}inline-block my-2 text-xl font-bold text-customBrownYellow{% else %}neon inline-block my-2 text-xl font-bold text-zinc-50{% endif %}">
                     {{ category.title }}
-                </a>
+                </a>                
                 {% set displayed_titles = displayed_titles|merge([category.title]) %}
             {% endif %}
         {% endfor %}
